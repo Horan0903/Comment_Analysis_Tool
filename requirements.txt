@@ -74,3 +74,4 @@ tzdata==2024.1
 urllib3==2.2.3
 yarl==1.11.1
 pyLDAvis~=3.4.1
+matplotlib~=3.9.2
