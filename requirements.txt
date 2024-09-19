@@ -36,7 +36,7 @@ matplotlib==3.9.2
 mdurl==0.1.2
 narwhals==1.4.2
 numexpr==2.10.1
-numpy==1.26.4
+numpy==1.21.0
 openai==1.40.8
 packaging==24.1
 pandas==2.2.2
