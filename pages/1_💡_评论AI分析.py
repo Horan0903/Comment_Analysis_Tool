@@ -37,14 +37,18 @@ if uploaded_file is not None:
     # 读取上传的 CSV 文件
     st.write("正在读取上传的 CSV 文件...")
     data = pd.read_csv(uploaded_file)
-    data['评论内容'] = data['评论内容'].fillna('')  # 用空字符串填充缺失值
-    data['评论内容'] = data['评论内容'].astype(str)  # 转换为字符串
-    comments = data['评论内容'].tolist()  # 假设评论列名为'评论内容'
-    likes = data['点赞数'].tolist()  # 假设点赞数列名为'点赞数'
+
+    # 让用户选择分析所在的列
+    comment_column = st.selectbox("选择评论内容所在列", data.columns)
+    likes_column = st.selectbox("选择点赞数所在列", data.columns)
+
+    data[comment_column] = data[comment_column].fillna('')  # 用空字符串填充缺失值
+    data[comment_column] = data[comment_column].astype(str)  # 转换为字符串
+    comments = data[comment_column].tolist()  # 假设评论列名为用户选择的列
+    likes = data[likes_column].tolist()  # 假设点赞数列名为用户选择的列
 
     st.write("CSV 文件读取完毕，预览数据：")
     st.dataframe(data.head())  # 显示前五行数据
-
 
     # 定义预处理函数
     def preprocess_comment(comment):
@@ -54,14 +58,12 @@ if uploaded_file is not None:
         comment = comment.strip()  # 去除前后空格
         return comment[:max_comment_length]
 
-
     # 定义分析函数
     def analyze_comment(client, comment):
         messages = [
             {'role': 'system', 'content': system_prompt},
             {'role': 'user', 'content': user_prompt_template.format(comment=comment)}
         ]
-
         try:
             completion = client.chat.completions.create(
                 model=model_name,
@@ -79,11 +81,9 @@ if uploaded_file is not None:
                 classification = "无法分类"
         return classification
 
-
     @st.cache_resource
     def init_client(api_key, base_url):
         return OpenAI(api_key=api_key, base_url=base_url)
-
 
     client = init_client(api_key, base_url)
 
@@ -126,14 +126,14 @@ if uploaded_file is not None:
             # 筛选视觉类评论
             st.write("正在计算视觉类评论的加权占比...")
             visual_comments = data[
-                (data['classification'] == '是') & (data['评论内容'].str.strip() != '') & (data['评论内容'] != ',,,,')]
+                (data['classification'] == '是') & (data[comment_column].str.strip() != '') & (data[comment_column] != ',,,,')]
 
             # 计算视觉类评论总点赞数
-            visual_likes = visual_comments['点赞数'].sum()
+            visual_likes = visual_comments[likes_column].sum()
 
             # 计算所有评论的总点赞数
-            filtered_data = data[(data['评论内容'].str.strip() != '') & (data['评论内容'] != ',,,,')]
-            total_likes = filtered_data['点赞数'].sum()
+            filtered_data = data[(data[comment_column].str.strip() != '') & (data[comment_column] != ',,,,')]
+            total_likes = filtered_data[likes_column].sum()
 
             # 计算视觉类评论加权占比
             weighted_visual_ratio = visual_likes / total_likes if total_likes != 0 else 0
