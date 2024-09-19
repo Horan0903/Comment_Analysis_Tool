@@ -46,3 +46,4 @@ openai==1.46.0
 streamlit~=1.38.0
 pandas~=2.2.2
 jieba~=0.42.1
+pyLDAvis==3.4.1
