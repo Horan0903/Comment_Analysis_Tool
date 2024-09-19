@@ -15,16 +15,16 @@ import re
 import string
 
 # 加载自定义词典
-jieba.load_userdict("/Users/liuhaoran/LHR/PycharmProjects/Comment analysis/LDA/SogouLabDic.txt")
-jieba.load_userdict("/Users/liuhaoran/LHR/PycharmProjects/Comment analysis/LDA/dict_baidu_utf8.txt")
-jieba.load_userdict("/Users/liuhaoran/LHR/PycharmProjects/Comment analysis/LDA/dict_pangu.txt")
-jieba.load_userdict("/Users/liuhaoran/LHR/PycharmProjects/Comment analysis/LDA/dict_sougou_utf8.txt")
-jieba.load_userdict("/Users/liuhaoran/LHR/PycharmProjects/Comment analysis/LDA/dict_tencent_utf8.txt")
-jieba.load_userdict("/Users/liuhaoran/LHR/PycharmProjects/Comment analysis/LDA/my_dict.txt")
+jieba.load_userdict("LDA/SogouLabDic.txt")
+jieba.load_userdict("LDA/dict_baidu_utf8.txt")
+jieba.load_userdict("LDA/dict_pangu.txt")
+jieba.load_userdict("LDA/dict_sougou_utf8.txt")
+jieba.load_userdict("LDA/dict_tencent_utf8.txt")
+jieba.load_userdict("LDA/my_dict.txt")
 
 # 加载停用词
 stopwords = {}.fromkeys(
-    [line.rstrip() for line in open('/Users/liuhaoran/LHR/PycharmProjects/Comment analysis/LDA/Stopword.txt')])
+    [line.rstrip() for line in open('LDA/Stopword.txt')])
 
 
 # 分词和停用词过滤
@@ -61,7 +61,7 @@ def display_word_cloud(lda, id2word):
         plt.figure(figsize=(10, 6))
         word_freq = dict(zip(id2word.values(), topic))
         wordcloud = WordCloud(width=800, height=400, max_words=50,
-                              font_path='/Users/liuhaoran/LHR/PycharmProjects/Comment analysis/LDA/Songti.ttc').generate_from_frequencies(
+                              font_path='LDA/Songti.ttc').generate_from_frequencies(
             word_freq)
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis('off')
