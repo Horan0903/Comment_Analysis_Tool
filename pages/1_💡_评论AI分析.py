@@ -34,7 +34,7 @@ max_comment_length = st.number_input("最大评论长度", value=1000, step=1)
 output_filename = st.text_input("输出文件名", "classified_comments_with_likes.csv")
 
 if uploaded_file is not None:
-    # 读取上传的 CSV 文件
+    # 读取上传的 CSV 文件1
     st.write("正在读取上传的 CSV 文件...")
     data = pd.read_csv(uploaded_file)
 
